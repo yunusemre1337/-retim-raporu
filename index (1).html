@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b2540">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Üretim Raporu</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b2540'/%3E%3Cpath d='M14 44V20m9 24V20m9 24V20m9 24V20m9 24V20' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--tx:#101828;--mut:#667085;--bd:#e4e7ec;--pri:#0f4c81;--prit:#fff;--soft:#eaf2fa;--warn:#fff6e5;--warnb:#f5c56b;--warnt:#8a4b00;--ok:#e7f6ed;--okt:#146c3a;--sh:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.06)}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0e1319;--card:#171d26;--tx:#eef1f5;--mut:#9aa6b6;--bd:#273040;--pri:#4d9be6;--prit:#06121f;--soft:#14263a;--warn:#33270f;--warnb:#7a5a1c;--warnt:#ffc978;--ok:#12301f;--okt:#7fdca4;--sh:0 1px 2px rgba(0,0,0,.4)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bar{background:#0b2540;color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;flex:1;font-weight:700;letter-spacing:.2px}
+.brand svg{width:30px;height:30px;flex:none}
+.who{font-size:13px;opacity:.85;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.out{background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+.card h2{font-size:15px;margin:0 0 10px;font-weight:700}
+.hero{margin:2px 2px 14px}
+.hero h1{font-size:24px;margin:0;letter-spacing:-.3px}
+.mut{color:var(--mut);font-size:13px}
+label{display:block;font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--mut);margin:14px 0 6px}
+input,select,textarea{width:100%;padding:13px 12px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);font:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--soft)}
+.btn{padding:15px;border:0;border-radius:12px;background:var(--pri);color:var(--prit);font:inherit;font-weight:700;width:100%;cursor:pointer;margin-top:16px;font-size:16px}
+.btn:disabled{opacity:.6}
+.ghost{background:transparent;color:var(--pri);border:1.5px dashed var(--pri);margin-top:10px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 14px;border-radius:99px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.chip.on{background:var(--pri);color:var(--prit);border-color:var(--pri)}
+.row{display:flex;gap:8px;align-items:flex-end;margin-bottom:2px}
+.row .q{width:96px;flex:none}
+.row label{margin-top:8px}
+.x{width:46px;height:47px;flex:none;border:1px solid var(--bd);background:transparent;color:var(--mut);border-radius:12px;cursor:pointer;font-size:16px}
+.seg{display:flex;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:4px;margin-bottom:14px;box-shadow:var(--sh)}
+.seg button{flex:1;padding:11px;border:0;background:transparent;color:var(--mut);border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+.seg button.on{background:var(--pri);color:var(--prit)}
+.total{background:linear-gradient(135deg,#0b2540,#0f4c81);color:#fff;border-radius:14px;padding:16px;margin:12px 0 10px}
+.total b{display:block;font-size:34px;line-height:1.1;font-variant-numeric:tabular-nums}
+.total span{font-size:13px;opacity:.85}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--bg);border:1px solid var(--bd);border-left:4px solid var(--c,#999);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--mut)}
+.pill{display:inline-block;padding:4px 10px;border-radius:99px;font-size:13px;font-weight:600;margin:3px 6px 3px 0}
+.ok{background:var(--ok);color:var(--okt)}
+.no{background:var(--warn);color:var(--warnt)}
+.rep{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--bd)}
+.rep:first-child{border-top:0}
+.av{width:40px;height:40px;border-radius:50%;background:var(--soft);color:var(--pri);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;font-size:14px}
+.rb{flex:1;min-width:0}
+.rt{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px}
+.its{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.it{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:3px 9px;font-size:14px}
+.it b{font-variant-numeric:tabular-nums}
+.sorun{background:var(--warn);border:1px solid var(--warnb);color:var(--warnt);padding:8px 10px;border-radius:10px;margin-top:8px;font-size:14px}
+.msg{padding:12px;border-radius:12px;margin:12px 0;display:none;font-weight:600;font-size:14px}
+.login{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:20px;max-width:420px;margin:0 auto}
+.login .logo{width:64px;height:64px;margin:0 auto 14px;display:block}
+.login h1{text-align:center;margin:0 0 4px;font-size:24px;letter-spacing:-.3px}
+.login p{text-align:center;margin:0 0 18px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header class="bar" id="bar" hidden>
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#fff" fill-opacity=".14"/><path d="M14 44V20m9 24V20m9 24V20m9 24V20m9 24V20" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>
+    <span>Üretim Raporu</span>
+  </div>
+  <span class="who" id="who"></span>
+  <button class="out" id="out" type="button">Çıkış</button>
+</header>
+
+<section class="login" id="login" hidden>
+  <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0b2540"/><path d="M14 44V20m9 24V20m9 24V20m9 24V20m9 24V20" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>
+  <h1>Üretim Raporu</h1>
+  <p class="mut">Günlük iş raporunu telefondan gönder</p>
+  <div class="card">
+    <label style="margin-top:0">Kullanıcı adı</label>
+    <input id="lu" autocomplete="username" autocapitalize="none" placeholder="Örn. ahmet">
+    <label>Şifre</label>
+    <input id="lp" type="password" autocomplete="current-password" placeholder="••••••">
+    <div class="msg no" id="lm"></div>
+    <button class="btn" id="lb" type="button">Giriş yap</button>
+  </div>
+  <p class="mut">Patron girişi için e-posta adresini yaz.</p>
+</section>
+
+<main class="wrap" id="app" hidden>
+
+  <div id="worker" hidden>
+    <div class="hero"><h1>Günlük Rapor</h1><div class="mut" id="wdate"></div></div>
+    <div class="msg ok" id="wm"></div>
+    <div class="card">
+      <h2>Bölümün</h2>
+      <div class="chips" id="chips"></div>
+      <label>Bugün yaptığın işler</label>
+      <div id="rows"></div>
+      <button class="btn ghost" id="add" type="button">+ Ürün ekle</button>
+      <label>Sorun / not (varsa)</label>
+      <textarea id="not" rows="2" placeholder="Makine arızası, malzeme eksikliği, fire..."></textarea>
+      <button class="btn" id="send" type="button">Raporu Gönder</button>
+    </div>
+    <div class="card"><h2>Bugün gönderdiklerim</h2><div id="mine"></div></div>
+  </div>
+
+  <div id="boss" hidden>
+    <div class="seg"><button id="b1" class="on" type="button">Raporlar</button><button id="b2" type="button">Çalışanlar</button></div>
+    <div id="pr">
+      <div class="card">
+        <label style="margin-top:0">Tarih</label>
+        <input type="date" id="gun">
+        <div class="total"><b id="top">0</b><span id="tarih"></span></div>
+        <div class="grid" id="ozet"></div>
+      </div>
+      <div class="card"><h2>Rapor girmeyenler</h2><div id="eksik"></div></div>
+      <div class="card"><h2>Raporlar</h2><div id="liste"></div></div>
+    </div>
+    <div id="pc" hidden>
+      <div class="card">
+        <h2>Yeni çalışan ekle</h2>
+        <label style="margin-top:0">Ad Soyad</label><input id="wn" placeholder="Örn. Ahmet Yılmaz">
+        <label>Kullanıcı adı (boşluksuz, küçük harf)</label><input id="wu" autocapitalize="none" placeholder="ahmet">
+        <label>Şifre (en az 6 karakter)</label><input id="wp">
+        <label>Bölüm</label><select id="wb"></select>
+        <div class="msg" id="wmm"></div>
+        <button class="btn" id="wadd" type="button">Çalışanı ekle</button>
+      </div>
+      <div class="card"><h2>Çalışanlar</h2><div id="wl"></div></div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+var cfg={apiKey:"AIzaSyAfD5163ZOxrkYpO1HnvMlnqBgoU5LTq_o",authDomain:"uretim-raporu.firebaseapp.com",projectId:"uretim-raporu",storageBucket:"uretim-raporu.firebasestorage.app",messagingSenderId:"721598486237",appId:"1:721598486237:web:431fcdc36eacbe1d40ed34"};
+var BOSS="emre_tsknt@hotmail.com",DOM="@uretim-raporu.app";
+var BOL=["Eko","Plise","Montaj","Paketleme","Panel","Polen Filtresi"];
+var COL={"Eko":"#2e90fa","Plise":"#7a5af8","Montaj":"#12b76a","Paketleme":"#f79009","Panel":"#ee46bc","Polen Filtresi":"#06aed4"};
+firebase.initializeApp(cfg);
+var auth=firebase.auth(),db=firebase.firestore(),me=null,curBol=BOL[0];
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function today(){var n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")}
+function col(b){return COL[b]||"#667085"}
+function ini(n){var p=String(n||"?").trim().split(/\s+/);return ((p[0]||"?")[0]+(p.length>1?p[p.length-1][0]:"")).toUpperCase()}
+function flash(id,txt,cls,ms){var m=$(id);m.textContent=txt;m.className="msg "+cls;m.style.display="block";if(ms)setTimeout(function(){m.style.display="none"},ms)}
+BOL.forEach(function(b){var o=document.createElement("option");o.textContent=b;$("wb").appendChild(o)});
+
+function setBol(b){
+  curBol=b;
+  $("chips").innerHTML="";
+  BOL.forEach(function(x){
+    var c=document.createElement("button");c.type="button";c.className="chip"+(x===curBol?" on":"");c.textContent=x;
+    c.onclick=function(){setBol(x)};$("chips").appendChild(c);
+  });
+}
+
+$("lb").onclick=function(){
+  var u=$("lu").value.trim();if(!u)return;
+  if(u.indexOf("@")<0)u=u.toLowerCase()+DOM;
+  auth.signInWithEmailAndPassword(u,$("lp").value).catch(function(){flash("lm","Giriş başarısız: kullanıcı adı veya şifre hatalı.","no")});
+};
+$("out").onclick=function(){auth.signOut()};
+
+auth.onAuthStateChanged(function(user){
+  if(!user){me=null;$("app").hidden=true;$("bar").hidden=true;$("login").hidden=false;return}
+  if((user.email||"").toLowerCase()===BOSS){me={uid:user.uid,boss:true,name:"Patron"};start();return}
+  db.collection("users").doc(user.uid).get().then(function(s){
+    if(!s.exists){alert("Bu hesap yetkili değil. Patronla görüşün.");auth.signOut();return}
+    me=Object.assign({uid:user.uid,boss:false},s.data());start();
+  }).catch(function(){alert("Bağlantı hatası. Tekrar deneyin.")});
+});
+
+function start(){
+  $("login").hidden=true;$("app").hidden=false;$("bar").hidden=false;
+  $("who").textContent=me.name;
+  $("worker").hidden=me.boss;$("boss").hidden=!me.boss;
+  if(me.boss){$("gun").value=today();loadBoss();loadWorkers()}
+  else{
+    $("wdate").textContent=new Date().toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long"});
+    setBol(me.dept&&COL[me.dept]?me.dept:BOL[0]);
+    if(!$("rows").children.length)addRow();
+    loadMine();
+  }
+}
+
+function addRow(){
+  var r=document.createElement("div");r.className="row";
+  r.innerHTML='<div style="flex:1"><label>Ürün</label><input class="u" placeholder="Örn. Kabin filtresi"></div><div class="q"><label>Adet</label><input class="a" type="number" inputmode="numeric" min="0" placeholder="0"></div><button class="x" type="button" aria-label="Sil">✕</button>';
+  r.querySelector(".x").onclick=function(){if($("rows").children.length>1)r.remove()};
+  $("rows").appendChild(r);
+}
+$("add").onclick=addRow;
+
+$("send").onclick=function(){
+  var it=[];
+  document.querySelectorAll("#rows .row").forEach(function(r){
+    var u=r.querySelector(".u").value.trim(),a=parseInt(r.querySelector(".a").value,10);
+    if(u&&a>0)it.push({u:u,a:a});
+  });
+  if(!it.length){alert("En az bir ürün ve adet gir.");return}
+  $("send").disabled=true;
+  db.collection("reports").add({uid:me.uid,name:me.name,dept:curBol,date:today(),items:it,note:$("not").value.trim(),createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+  .then(function(){
+    $("rows").innerHTML="";addRow();$("not").value="";
+    flash("wm","Raporun patrona iletildi. Eline sağlık!","ok",4000);window.scrollTo(0,0);loadMine();
+  }).catch(function(){alert("Gönderilemedi. İnterneti kontrol edip tekrar dene.")})
+  .then(function(){$("send").disabled=false});
+};
+
+function itemsHtml(x){return '<div class="its">'+x.items.map(function(i){return '<span class="it">'+esc(i.u)+' <b>'+i.a+'</b></span>'}).join("")+'</div>'}
+function noteHtml(x){return x.note?'<div class="sorun">⚠ '+esc(x.note)+'</div>':''}
+function badge(d){var c=col(d);return '<span class="badge" style="background:'+c+'22;color:'+c+'">'+esc(d)+'</span>'}
+function repHtml(x){return '<div class="rep"><div class="av">'+esc(ini(x.name))+'</div><div class="rb"><div class="rt"><b>'+esc(x.name)+'</b>'+badge(x.dept)+'</div>'+itemsHtml(x)+noteHtml(x)+'</div></div>'}
+
+function loadMine(){
+  db.collection("reports").where("uid","==",me.uid).where("date","==",today()).get().then(function(q){
+    var h=q.docs.map(function(d){var x=d.data();return '<div class="rep"><div class="rb"><div class="rt">'+badge(x.dept)+'</div>'+itemsHtml(x)+noteHtml(x)+'</div></div>'}).join("");
+    $("mine").innerHTML=h||'<span class="mut">Henüz rapor göndermedin.</span>';
+  });
+}
+
+var staff=[];
+function loadWorkers(){
+  return db.collection("users").get().then(function(q){
+    staff=q.docs.map(function(d){return Object.assign({uid:d.id},d.data())});
+    $("wl").innerHTML=staff.map(function(s){return '<div class="rep"><div class="av">'+esc(ini(s.name))+'</div><div class="rb"><div class="rt"><b>'+esc(s.name)+'</b>'+badge(s.dept)+'</div><div class="mut">Kullanıcı adı: '+esc(s.username)+'</div></div></div>'}).join("")||'<span class="mut">Henüz çalışan yok.</span>';
+    loadBoss();
+  });
+}
+function loadBoss(){
+  var g=$("gun").value||today();
+  db.collection("reports").where("date","==",g).get().then(function(q){
+    var d=q.docs.map(function(x){return x.data()});
+    var tot={},sum=0;BOL.forEach(function(b){tot[b]=0});
+    d.forEach(function(x){x.items.forEach(function(i){tot[x.dept]=(tot[x.dept]||0)+i.a;sum+=i.a})});
+    $("top").textContent=sum;
+    $("tarih").textContent="Toplam adet · "+new Date(g+"T12:00:00").toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long"})+" · "+d.length+" rapor";
+    $("ozet").innerHTML=BOL.map(function(b){return '<div class="stat" style="--c:'+col(b)+'"><b>'+tot[b]+'</b><span>'+b+'</span></div>'}).join("");
+    var gir={};d.forEach(function(x){gir[x.uid]=1});
+    var ek=staff.filter(function(s){return !gir[s.uid]});
+    $("eksik").innerHTML=!staff.length?'<span class="mut">Önce Çalışanlar sekmesinden çalışan ekle.</span>':ek.length?ek.map(function(s){return '<span class="pill no">'+esc(s.name)+'</span>'}).join(""):'<span class="pill ok">Herkes rapor girdi</span>';
+    d.sort(function(a,b){return (b.note?1:0)-(a.note?1:0)});
+    $("liste").innerHTML=d.map(repHtml).join("")||'<span class="mut">Bu tarihte rapor yok.</span>';
+  }).catch(function(){$("liste").textContent="Raporlar okunamadı."});
+}
+$("gun").onchange=loadBoss;
+function tab(n){$("pr").hidden=n!==1;$("pc").hidden=n!==2;$("b1").className=n===1?"on":"";$("b2").className=n===2?"on":""}
+$("b1").onclick=function(){tab(1)};$("b2").onclick=function(){tab(2)};
+
+$("wadd").onclick=function(){
+  var n=$("wn").value.trim(),u=$("wu").value.trim().toLowerCase(),p=$("wp").value;
+  if(!n||!/^[a-z0-9._-]+$/.test(u)||p.length<6){flash("wmm","Ad, kullanıcı adı (harf/rakam) ve en az 6 karakterli şifre gerekli.","no");return}
+  var sec=firebase.apps.filter(function(a){return a.name==="sec"})[0]||firebase.initializeApp(cfg,"sec");
+  $("wadd").disabled=true;
+  sec.auth().createUserWithEmailAndPassword(u+DOM,p).then(function(c){
+    var id=c.user.uid;
+    return sec.auth().signOut().then(function(){
+      return db.collection("users").doc(id).set({name:n,username:u,dept:$("wb").value,role:"worker"});
+    });
+  }).then(function(){
+    $("wn").value=$("wu").value=$("wp").value="";
+    flash("wmm","Çalışan eklendi. Kullanıcı adı ve şifreyi ona ilet.","ok",5000);loadWorkers();
+  }).catch(function(e){flash("wmm",e&&e.code==="auth/email-already-in-use"?"Bu kullanıcı adı zaten var.":"Eklenemedi, tekrar dene.","no")})
+  .then(function(){$("wadd").disabled=false});
+};
+</script>
+</body>
+</html>
